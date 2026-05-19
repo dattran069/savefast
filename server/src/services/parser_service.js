@@ -4,7 +4,12 @@ const path = require('path');
 
 const { execSync } =
   require('child_process');
+exports.extractInstagram =
+  async (url) => {
 
+    return await exports
+        .extractTikTok(url);
+  };
 exports.extractTikTok =
   async (url) => {
 

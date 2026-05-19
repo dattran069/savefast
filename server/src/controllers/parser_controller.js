@@ -1,5 +1,6 @@
 const {
   extractTikTok,
+  extractInstagram,
 } = require('../services/parser_service');
 
 exports.parseTikTok = async (
@@ -30,3 +31,30 @@ exports.parseTikTok = async (
     });
   }
 };
+exports.parseInstagram =
+  async (req, res) => {
+
+    try {
+
+      const { url } =
+        req.body;
+
+      const data =
+        await extractInstagram(
+          url,
+        );
+
+      return res.json({
+        success: true,
+        data,
+      });
+
+    } catch (e) {
+
+      return res.status(500)
+          .json({
+        success: false,
+        error: e.toString(),
+      });
+    }
+  };

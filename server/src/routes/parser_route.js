@@ -10,5 +10,8 @@ router.post(
   '/tiktok',
   parseTikTok,
 );
-
+router.post(
+  '/instagram',
+  parseInstagram,
+);
 module.exports = router;

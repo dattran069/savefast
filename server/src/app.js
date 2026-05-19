@@ -25,7 +25,9 @@ app.use(
 );
 const PORT =
   process.env.PORT || 3000;
-
+app.get('/', (req, res) => {
+  res.send('SaveFast API Running');
+});
 app.listen(PORT, () => {
   console.log(
     `Server running on ${PORT}`,

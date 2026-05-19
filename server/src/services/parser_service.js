@@ -2,11 +2,12 @@ const fs = require('fs');
 
 const path = require('path');
 
-const ytDlp =
-  require('yt-dlp-exec');
+const { execSync } =
+  require('child_process');
 
 exports.extractTikTok =
   async (url) => {
+
     const folder = path.join(
       __dirname,
       '../../downloads',
@@ -16,52 +17,37 @@ exports.extractTikTok =
       fs.mkdirSync(folder);
     }
 
+    const id =
+      Date.now().toString();
+
     const output =
       path.join(
         folder,
-        '%(id)s.%(ext)s',
+        `${id}.mp4`,
       );
 
-    // parse metadata
-    const result = await ytDlp(
-      url,
-      {
-        dumpSingleJson: true,
-      },
+    // metadata
+    const metadataRaw =
+      execSync(
+        `yt-dlp --dump-single-json "${url}"`,
+      ).toString();
+
+    const metadata =
+      JSON.parse(metadataRaw);
+
+    // download
+    execSync(
+      `yt-dlp -o "${output}" "${url}"`,
     );
 
-    // download video
-    await ytDlp(url, {
-      output,
-    });
-
-    const files =
-      fs.readdirSync(folder);
-
-    const latest =
-      files
-        .map((file) => ({
-          file,
-          time:
-            fs.statSync(
-              path.join(
-                folder,
-                file,
-              ),
-            ).mtime.getTime(),
-        }))
-        .sort(
-          (a, b) =>
-            b.time - a.time,
-        )[0];
-
     return {
-      title: result.title,
+      title:
+          metadata.title,
 
       thumbnail:
-        result.thumbnail,
+          metadata.thumbnail,
 
       videoUrl:
-        `http://192.168.1.33:3000/downloads/${latest.file}`,
+          `${process.env.BASE_URL}/downloads/${id}.mp4`,
     };
   };

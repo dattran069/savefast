@@ -2,6 +2,7 @@ const express = require('express');
 
 const {
   parseTikTok,
+  parseInstagram,
 } = require('../controllers/parser_controller');
 
 const router = express.Router();

@@ -2,14 +2,19 @@ const fs = require('fs');
 
 const path = require('path');
 
-const { execSync } =
-  require('child_process');
+const {
+  execSync,
+} = require('child_process');
+
+// Instagram
 exports.extractInstagram =
   async (url) => {
 
     return await exports
         .extractTikTok(url);
   };
+
+// TikTok
 exports.extractTikTok =
   async (url) => {
 
@@ -32,25 +37,21 @@ exports.extractTikTok =
       );
 
     // metadata
-    // const metadataRaw =
-    //   execSync(
-    //     `yt-dlp --dump-single-json "${url}"`,
-    //   ).toString();
-      const metadataRaw =
-  execSync(
-    `yt-dlp --cookies-from-browser chrome --dump-single-json "${url}"`,
-  ).toString();
+    const metadataRaw =
+      execSync(
+        `yt-dlp --dump-single-json "${url}"`,
+      ).toString();
+
     const metadata =
       JSON.parse(metadataRaw);
 
     // download
-    // execSync(
-    //   `yt-dlp -o "${output}" "${url}"`,
-    // );
-execSync(
-  `yt-dlp --cookies-from-browser chrome -o "${output}" "${url}"`,
-);
+    execSync(
+      `yt-dlp -o "${output}" "${url}"`,
+    );
+
     return {
+
       title:
           metadata.title,
 
